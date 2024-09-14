@@ -95,4 +95,23 @@ class CategoryController extends Controller
 
         return redirect()->back()->with('success', "Category deleted successfully.");
     }
+    public function restore($id)
+    {
+        $category = Category::onlyTrashed()->find($id);
+        $existingCategory = Category::where('id', '!=', $id)
+                                    ->where('name', $category->name)
+                                    ->where('created_by', Auth::user()->id)
+                                    ->get()->first();
+        if(isset($existingCategory)){
+            return redirect()->back()->with('error', "Can't restore this category as same name already exists.");
+        } else{
+            $category->restore();
+            return redirect()->back()->with('success', "Category restored successfully.");
+        }
+    }
+    public function hardDelete($id)
+    {
+        Category::onlyTrashed()->find($id)->delete();
+        return redirect()->back()->with('success', "Category permanently deleted successfully.");
+    }
 }
