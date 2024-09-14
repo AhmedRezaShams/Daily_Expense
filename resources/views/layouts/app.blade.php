@@ -13,11 +13,11 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="{{ asset('js/script.js')}}"></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
-
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white shadow">
@@ -26,9 +26,25 @@
                     </div>
                 </header>
             @endif
-
+            
             <!-- Page Content -->
             <main>
+                <!-- Toast Container -->
+                    <div class="toast toast-bottom toast-end">
+                        <!-- Success Toast -->
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                <span>{{ session('success') }}</span>
+                            </div>
+                        @endif
+
+                        <!-- Error Toast -->
+                        @if (session('error'))
+                            <div class="alert alert-error">
+                                <span>{{ session('error') }}</span>
+                            </div>
+                        @endif
+                    </div>
                 {{ $slot }}
             </main>
         </div>

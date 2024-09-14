@@ -36,15 +36,16 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|max:255'
         ]);
-
+        $existingCategory = Category::where('name', $request->name)->where('created_by', Auth::user()->id)->get()->first();
+        if(isset($existingCategory)){
+            return redirect()->back()->with('error', 'Category already exists!');
+        }
         Category::create([
             'name' => $request->name,
             'created_by' => Auth::user()->id
         ]);
 
-        return response()->json([
-            'success' => 'Category created successfully.'
-        ]);
+        return redirect()->back()->with('success', "Category created successfully.");
     }
 
     /**
@@ -70,19 +71,18 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = Category::find($id);
-
         $request->validate([
             'name' => 'required|max:255'
         ]);
+        $existingCategory = Category::where('id', '!=', $id)->where('name', $request->name)->where('created_by', Auth::user()->id)->get()->first();
+        if(isset($existingCategory)){
+            return redirect()->back()->with('error', 'Category already exists!');
+        }
+        $category = Category::find($id);
+        $category->name = $request->name;
+        $category->save();
 
-        $category->update([
-            'name' => $request->name
-        ]);
-
-        return response()->json([
-            'success' => 'Category updated successfully.'
-        ]);
+        return redirect()->back()->with('success', "Category updated successfully.");
     }
 
     /**
@@ -93,8 +93,6 @@ class CategoryController extends Controller
     {
         Category::find($id)->delete();
 
-        return response()->json([
-            'success' => 'Category deleted successfully.'
-        ]);
+        return redirect()->back()->with('success', "Category deleted successfully.");
     }
 }
