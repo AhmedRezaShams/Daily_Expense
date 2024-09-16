@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {
@@ -12,7 +14,10 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        return view('expense.index');
+        $categories = Category::where('created_by', '=', Auth::user()->id)
+                                ->pluck('name', 'id')
+                                ->prepend('Select Category', '');
+        return view('expense.index', compact('categories'));
     }
 
     /**
@@ -28,7 +33,7 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**

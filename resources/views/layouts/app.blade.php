@@ -14,6 +14,8 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script src="{{ asset('js/script.js')}}"></script>
+        <!-- Add Flatpickr -->
+        <script src="{{ asset('node_modules/flatpickr/dist/flatpickr.js') }}"></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
