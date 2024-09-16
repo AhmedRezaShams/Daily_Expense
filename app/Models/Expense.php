@@ -15,5 +15,15 @@ class Expense extends Model
         'category_id',
         'reason',
         'amount',
+        'transaction_type',
     ];
+    public static $type = [
+        'debit' => 'In',
+        'credit' => 'Out'
+    ];
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id')->withTrashed();
+    }
+
 }
